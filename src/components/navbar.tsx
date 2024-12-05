@@ -8,7 +8,6 @@ import { Button } from "~/components/ui/button"
 import { Code2 } from 'lucide-react'
 
 import { useSession, signOut } from "next-auth/react"
-import { User } from "lucide-react"
 
 export function Navbar() {
   const pathname = usePathname()

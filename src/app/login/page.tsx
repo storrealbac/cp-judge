@@ -1,7 +1,6 @@
 'use client'
 
 import { signIn } from "next-auth/react"
-import Link from "next/link"
 import { Button } from "~/components/ui/button"
 import {
   Card,
@@ -13,8 +12,12 @@ import {
 import { Github } from 'lucide-react'
 
 export default function LoginPage() {
-  const handleGitHubLogin = () => {
-    signIn('github', { callbackUrl: '/' })
+  const handleGitHubLogin = async () => {
+    try {
+      await signIn('github', { callbackUrl: '/' })
+    } catch (error) {
+      console.error('GitHub login failed:', error)
+    }
   }
 
   return (
@@ -31,7 +34,6 @@ export default function LoginPage() {
             <Github className="mr-2 h-4 w-4" />
             Login with GitHub
           </Button>
-
         </CardContent>
       </Card>
     </div>
