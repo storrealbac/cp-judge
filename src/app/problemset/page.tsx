@@ -18,7 +18,7 @@ const problems = [
 export default function ProblemSetPage() {
   return (
     <div className="container m-auto py-10">
-      <h1 className="text-3xl font-bold mb-6">CSES Problem Set</h1>
+      <h1 className="text-3xl font-bold mb-6">Problem set</h1>
       <Table>
         <TableHeader>
           <TableRow>
