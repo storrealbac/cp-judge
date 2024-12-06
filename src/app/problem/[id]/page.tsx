@@ -12,7 +12,7 @@ import Latex from "react-latex-next";
 import CodeEditor from "~/components/codeeditor";
 
 
-export default function ProblemPage({params}: {params: {id: string}}) {
+export default function ProblemPage() {
 
   const problem_statement = `
 Kostya has a text $s$ consisting of $n$ words made up of Latin alphabet letters. He also has two strips on which he must write the text. The first strip can hold m characters, while the second can hold as many as needed.
