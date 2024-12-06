@@ -148,3 +148,15 @@
     @apply px-4;
   }
 }
+
+/* Fixing Katex library */
+.mord, .mpunct, .mop, .mtext, .mspace, .mrel, .mbin, 
+.mclose, .mopen, .mfrac, .msqrt, .msubsup, .mmultiscripts, 
+.mtable, .mtr, .mtd, .mover, .munder, .munderover, .mphantom, 
+.menclose, .merror, .mord.vlist, .msupsup.vlist, .mtag {
+  display: none;
+}
+
+textarea {
+  outline: none !important;
+}
