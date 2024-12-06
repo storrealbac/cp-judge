@@ -56,7 +56,7 @@ const highlighting = {
 } as const;
 
 export default function CodeEditor() {
-  const [code, setCode] = useState(code_templates['cpp']);
+  const [code, setCode] = useState(code_templates.cpp);
 
   const [currentLanguage, setCurrentLanguage] = useState('cpp' as CodeLanguage);
   const lineNumbers = code.split('\n').map((_, idx) => idx + 1);
