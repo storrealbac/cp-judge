@@ -44,7 +44,7 @@ export function Navbar() {
             </Link>
             {session ? (
               <Link
-                href="/profile"
+                href={`/profile/${session.user.username}`}
                 className={cn(
                   "transition-colors hover:text-foreground/80",
                   pathname?.startsWith("/problemset")
@@ -63,7 +63,7 @@ export function Navbar() {
           {session ? (
             <div className="flex items-center gap-4">
               <span className="text-sm text-foreground">
-                {session.user?.name}
+                {session.user.username}
               </span>
               <Button
                 variant="outline"

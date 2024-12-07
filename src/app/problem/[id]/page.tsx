@@ -6,10 +6,10 @@ import {
   CardTitle,
 } from "~/components/ui/card"
 
-import Testcase from "~/components/testcase";
+import Testcase from "~/components/problem/testcase";
 import Latex from "react-latex-next";
 
-import CodeEditor from "~/components/codeeditor";
+import CodeEditor from "~/components/problem/codeeditor";
 
 
 export default function ProblemPage() {

@@ -14,17 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
 
 // Necessary for Next auth
 model Account {
@@ -56,13 +45,33 @@ model Session {
 
 model User {
     id            String    @id @default(cuid())
+    username      String?   @unique
     name          String?
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    
+    biography     String?
+    country       String?
+    institution   String?
+
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+
+    followers     Follows[] @relation("following")
+    following     Follows[] @relation("followers")
+}
+
+model Follows {
+    follower    User     @relation("followers", fields: [followerId], references: [id], onDelete: Cascade)
+    followerId  String
+    following   User     @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+    followingId String
+    createdAt   DateTime @default(now())
+
+    @@id([followerId, followingId])
+    @@index([followerId])
+    @@index([followingId])
 }
 
 model VerificationToken {

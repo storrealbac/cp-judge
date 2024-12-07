@@ -51,6 +51,7 @@
     "react-latex-next": "^3.0.0",
     "react-simple-code-editor": "^0.14.1",
     "server-only": "^0.0.1",
+    "sonner": "^1.7.0",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
