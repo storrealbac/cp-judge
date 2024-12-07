@@ -41,8 +41,6 @@ export default function ProfilePage({ params }: {
     return <div>No profile found</div>
   }
 
-  const isCurrentUser = session?.user.username === profile.username;
-
   return (
     <div className="container py-10 m-auto">
       <div className="grid gap-6 md:grid-cols-[1fr_2fr]">
