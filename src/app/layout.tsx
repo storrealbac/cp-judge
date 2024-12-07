@@ -6,7 +6,6 @@ import { Navbar } from "~/components/navbar"
 import { SessionProvider } from "next-auth/react"
 
 import { TRPCReactProvider } from "~/trpc/react"
-import { headers } from "next/headers"
 
 
 const inter = Inter({ subsets: ["latin"] })
@@ -25,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <TRPCReactProvider headers={headers()}>
+      <TRPCReactProvider>
         <div className="relative flex min-h-screen flex-col">
           <SessionProvider>
             <Navbar />
