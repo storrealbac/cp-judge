@@ -13,6 +13,8 @@ const config = {
     "plugin:@typescript-eslint/stylistic-type-checked"
   ],
   "rules": {
+    "@typescript-eslint/no-unnecessary-type-assertion": "warn",
+    "@typescript-eslint/consistent-indexed-object-style": "off",
     "@typescript-eslint/prefer-optional-chain": "warn",
     "react/no-unescaped-entities": "warn",
     "@typescript-eslint/prefer-nullish-coalescing": "warn",
