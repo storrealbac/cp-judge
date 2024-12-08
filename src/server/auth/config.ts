@@ -15,7 +15,6 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-
       username: string;
     } & DefaultSession["user"];
   }
@@ -38,7 +37,7 @@ export const authConfig = {
       profile(profile) {
         return {
           id: profile.id.toString(),
-          name: profile.name || profile.login,
+          name: profile.name ?? profile.login ?? "Uknown",
           email: profile.email,
           image: profile.avatar_url,
           username: profile.login,

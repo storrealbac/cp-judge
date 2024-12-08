@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { Mail, MapPin, Building2, X, Save, UserMinus, UserPlus } from "lucide-react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "~/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardFooter } from "~/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";

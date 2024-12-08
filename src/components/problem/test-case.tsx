@@ -12,11 +12,11 @@ import { Separator } from "~/components/ui/separator"
 
 interface TextAreaWithCopyProps {
   input: string
-  output: string
+  expectedOutput: string
   className?: string
 }
 
-export default function Testcase({ input, output, className }: TextAreaWithCopyProps) {
+export default function Testcase({ input, expectedOutput, className }: TextAreaWithCopyProps) {
 
   const handleCopyText = async (text: string) => {
     try {
@@ -27,7 +27,7 @@ export default function Testcase({ input, output, className }: TextAreaWithCopyP
   }
 
   const handleCopyInput = () => handleCopyText(input.trim())
-  const handleCopyOutput = () => handleCopyText(output.trim())
+  const handleCopyOutput = () => handleCopyText(expectedOutput.trim())
 
   return (
     <Card className={`${className} grid grid-cols-2`}>
@@ -51,7 +51,9 @@ export default function Testcase({ input, output, className }: TextAreaWithCopyP
           </Button>
         </div>
         <CardContent>
-          <pre className="min-h-[100px] w-full overflow-auto whitespace-pre rounded-md bg-muted p-4 font-mono text-sm p-2">{output}</pre>
+          <pre className="min-h-[100px] w-full overflow-auto whitespace-pre rounded-md bg-muted p-4 font-mono text-sm p-2">
+            {expectedOutput}
+          </pre>
         </CardContent>
       </div>
     </Card>

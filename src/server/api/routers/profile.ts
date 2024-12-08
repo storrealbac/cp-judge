@@ -118,84 +118,93 @@ export const profileRouter = createTRPCRouter({
       });
     }),
 
-    followUser: protectedProcedure
-        .input(z.object({ targetUserId: z.string() }))
-        .mutation(async ({ ctx, input }) => {
-            // Check if target user exists
-            const targetUser = await ctx.db.user.findUnique({
-                where: { id: input.targetUserId },
-            });
+  followUser: protectedProcedure
+    .input(z.object({ targetUserId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // Check if target user exists
+      const targetUser = await ctx.db.user.findUnique({
+        where: { id: input.targetUserId },
+      });
 
-            if (!targetUser) {
-                throw new TRPCError({
-                    code: 'NOT_FOUND',
-                    message: 'Target user not found',
-                });
-            }
+      if (!targetUser) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Target user not found',
+        });
+      }
 
-            // Prevent self-following
-            if (targetUser.id === ctx.session.user.id) {
-                throw new TRPCError({
-                    code: 'BAD_REQUEST',
-                    message: 'Cannot follow yourself',
-                });
-            }
+      // Prevent self-following
+      if (targetUser.id === ctx.session.user.id) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Cannot follow yourself',
+        });
+      }
 
-            // Check if already following
-            const existingFollow = await ctx.db.follows.findUnique({
-                where: {
-                    followerId_followingId: {
-                        followerId: ctx.session.user.id,
-                        followingId: input.targetUserId,
-                    },
-                },
-            });
+      // Check if already following
+      const existingFollow = await ctx.db.follows.findUnique({
+        where: {
+          followerId_followingId: {
+            followerId: ctx.session.user.id,
+            followingId: input.targetUserId,
+          },
+        },
+      });
 
-            if (existingFollow) {
-                throw new TRPCError({
-                    code: 'BAD_REQUEST',
-                    message: 'Already following this user',
-                });
-            }
+      if (existingFollow) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Already following this user',
+        });
+      }
 
-            // Create follow relationship
-            return ctx.db.follows.create({
-                data: {
-                    followerId: ctx.session.user.id,
-                    followingId: input.targetUserId,
-                },
-            });
-        }),
+      // Create follow relationship
+      return ctx.db.follows.create({
+        data: {
+          followerId: ctx.session.user.id,
+          followingId: input.targetUserId,
+        },
+      });
+    }),
 
-    unfollowUser: protectedProcedure
-        .input(z.object({ targetUserId: z.string() }))
-        .mutation(async ({ ctx, input }) => {
-            // Check if follow relationship exists
-            const existingFollow = await ctx.db.follows.findUnique({
-                where: {
-                    followerId_followingId: {
-                        followerId: ctx.session.user.id,
-                        followingId: input.targetUserId,
-                    },
-                },
-            });
+  unfollowUser: protectedProcedure
+    .input(z.object({ targetUserId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // Check if follow relationship exists
+      const existingFollow = await ctx.db.follows.findUnique({
+        where: {
+          followerId_followingId: {
+            followerId: ctx.session.user.id,
+            followingId: input.targetUserId,
+          },
+        },
+      });
 
-            if (!existingFollow) {
-                throw new TRPCError({
-                    code: 'NOT_FOUND',
-                    message: 'Not following this user',
-                });
-            }
+      if (!existingFollow) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Not following this user',
+        });
+      }
 
-            // Delete follow relationship
-            return ctx.db.follows.delete({
-                where: {
-                    followerId_followingId: {
-                        followerId: ctx.session.user.id,
-                        followingId: input.targetUserId,
-                    },
-                },
-            });
-        }),
+      // Delete follow relationship
+      return ctx.db.follows.delete({
+        where: {
+          followerId_followingId: {
+            followerId: ctx.session.user.id,
+            followingId: input.targetUserId,
+          },
+        },
+      });
+    }),
+  isAdmin: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        where: { id: input.userId },
+        select: { role: true },
+      });
+      return user?.role === "ADMIN";
+    }),
 
 });

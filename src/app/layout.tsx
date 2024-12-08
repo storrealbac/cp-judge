@@ -7,7 +7,6 @@ import { SessionProvider } from "next-auth/react"
 
 import { TRPCReactProvider } from "~/trpc/react"
 
-
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
@@ -21,6 +20,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  
   return (
     <html lang="en">
       <body className={inter.className}>

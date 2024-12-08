@@ -1,21 +1,21 @@
 "use client"
 import { use } from "react"
-import { useSession } from "next-auth/react"
 import { api } from "~/trpc/react";
+import Link from "next/link";
 
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { Badge } from "~/components/ui/badge"
 import { Progress } from "~/components/ui/progress"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 
-import ProfileCard from "~/components/profile/profilecard"
+import ProfileCard from "~/components/profile/profile-card"
+import Loader from "~/components/loader";
 
 export default function ProfilePage({ params }: {
-  params: Promise<{ username: string }> 
+  params: Promise<{ username: string }>
 }) {
 
   const { username } = use(params);
-  const { data: session } = useSession()
 
   const { data: profile, isLoading, error } = api.profile.get.useQuery({
     username: username ?? ""
@@ -30,7 +30,7 @@ export default function ProfilePage({ params }: {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loader />
   }
 
   if (error) {
@@ -80,8 +80,8 @@ export default function ProfilePage({ params }: {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {following && following?.map((follow) => (
-                  <div key={follow.id} className="flex items-center space-x-4">
+                {following?.map((follow) => (
+                  <Link href={`/profile/${follow.username}`} key={follow.id} className="flex items-center space-x-4">
                     <Avatar>
                       <AvatarImage src={follow.image ?? "./does-not-exist.svg"} alt={follow.name ?? ""} />
                       <AvatarFallback>{follow.name?.[0] ?? "?"}</AvatarFallback>
@@ -90,7 +90,7 @@ export default function ProfilePage({ params }: {
                       <p className="font-medium">{follow.name}</p>
                       <p className="text-sm text-muted-foreground">{follow.email}</p>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </CardContent>
@@ -105,17 +105,17 @@ export default function ProfilePage({ params }: {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {followers && followers.map((follow) => (
-                  <div key={follow.id} className="flex items-center space-x-4">
+                {followers?.map((follow) => (
+                  <Link href={`/profile/${follow.username}`} key={follow.id} className="flex items-center space-x-4">
                     <Avatar>
-                      <AvatarImage src={follow.image ?? "/placeholder.svg"} alt={follow.name ?? ""} />
-                      <AvatarFallback>{follow.name?.[0] ?? "?"}</AvatarFallback>
+                        <AvatarImage src={follow.image ?? "/placeholder.svg"} alt={follow.name ?? ""} />
+                        <AvatarFallback>{follow.name?.[0] ?? "?"}</AvatarFallback>
                     </Avatar>
                     <div>
                       <p className="font-medium">{follow.name}</p>
                       <p className="text-sm text-muted-foreground">{follow.email}</p>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </CardContent>
