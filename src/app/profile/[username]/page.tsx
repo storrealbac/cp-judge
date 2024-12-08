@@ -80,7 +80,7 @@ export default function ProfilePage({ params }: {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {following && following.map((follow) => (
+                {following && following?.map((follow) => (
                   <div key={follow.id} className="flex items-center space-x-4">
                     <Avatar>
                       <AvatarImage src={follow.image ?? "./does-not-exist.svg"} alt={follow.name ?? ""} />

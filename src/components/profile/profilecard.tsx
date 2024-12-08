@@ -38,7 +38,7 @@ export default function ProfileCard({ profile }: { profile: User }) {
   const updateProfile = api.profile.update.useMutation({
     onSuccess: () => {
       setIsEditing(false);
-      utils.profile.get.invalidate();
+      void utils.profile.get.invalidate();
       toast.success("Profile updated successfully", {
         description: "Your changes have been saved."
       });
@@ -52,7 +52,7 @@ export default function ProfileCard({ profile }: { profile: User }) {
 
   const followUser = api.profile.followUser.useMutation({
     onSuccess: () => {
-      utils.profile.getLastFollowers.invalidate();
+      void utils.profile.getLastFollowers.invalidate();
       toast.success("Successfully followed user");
     },
     onError: (error) => {
@@ -64,7 +64,7 @@ export default function ProfileCard({ profile }: { profile: User }) {
 
   const unfollowUser = api.profile.unfollowUser.useMutation({
     onSuccess: () => {
-      utils.profile.getLastFollowers.invalidate();
+      void utils.profile.getLastFollowers.invalidate();
       toast.success("Successfully unfollowed user");
     },
     onError: (error) => {
