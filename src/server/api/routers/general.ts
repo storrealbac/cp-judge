@@ -3,7 +3,6 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 
-
 export const generalRouter = createTRPCRouter({
   health: publicProcedure
     .query(async () => {

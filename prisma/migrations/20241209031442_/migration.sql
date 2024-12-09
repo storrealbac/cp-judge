@@ -1,0 +1,9 @@
+-- CreateEnum
+CREATE TYPE "Language" AS ENUM ('C', 'CPP', 'JAVA', 'PYTHON', 'RUST', 'GO', 'JAVASCRIPT', 'TYPESCRIPT', 'KOTLIN', 'SWIFT', 'RUBY', 'CSHARP', 'PHP', 'PERL', 'BASH', 'HASKELL', 'SCALA', 'LUA', 'D', 'FSHARP', 'ERLANG', 'ELIXIR', 'OCAML', 'R', 'NIM', 'SQL', 'COBOL', 'FORTH', 'PASCAL', 'FORTAN', 'LISP', 'NONE');
+
+-- AlterTable
+ALTER TABLE "Problem" ADD COLUMN     "memoryLimit" DOUBLE PRECISION NOT NULL DEFAULT 512,
+ADD COLUMN     "timeLimit" DOUBLE PRECISION NOT NULL DEFAULT 1.5;
+
+-- AlterTable
+ALTER TABLE "Submission" ADD COLUMN     "language" "Language" NOT NULL DEFAULT 'NONE';

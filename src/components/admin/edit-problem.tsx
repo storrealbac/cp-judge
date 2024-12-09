@@ -43,7 +43,7 @@ const problemSchema = z.object({
   statement: z.string().min(1, "Problem statement is required"),
   inputDescription: z.string().min(1, "Input description is required"),
   outputDescription: z.string().min(1, "Output description is required"),
-  difficulty: z.number().min(1).max(10),
+  difficulty: z.number().min(1).max(100),
 })
 
 type ProblemFormValues = z.infer<typeof problemSchema>

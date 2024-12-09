@@ -27,8 +27,8 @@ import { useDebounce } from "~/hooks/use-debounce";
 import Loader from "~/components/loader";
 
 function getDifficultyColor(difficulty: number): "default" | "destructive" | "outline" | "secondary" {
-  if (difficulty <= 3) return "secondary";
-  if (difficulty <= 6) return "default";
+  if (difficulty <= 300) return "secondary";
+  if (difficulty <= 600) return "default";
   return "destructive";
 }
 

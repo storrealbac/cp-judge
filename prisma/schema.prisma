@@ -121,6 +121,9 @@ model Problem {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    timeLimit   Float @default(1.5) // In seconds
+    memoryLimit Float @default(512) // In MB
+
     tags        TagOnProblem[]
     testCases   TestCase[]
     submissions Submission[]
@@ -167,6 +170,41 @@ enum SubmissionStatus {
     COMPILATION_ERROR
 }
 
+enum Language {
+    C
+    CPP
+    JAVA
+    PYTHON
+    RUST
+    GO
+    JAVASCRIPT
+    TYPESCRIPT
+    KOTLIN
+    SWIFT
+    RUBY
+    CSHARP
+    PHP
+    PERL
+    BASH
+    HASKELL
+    SCALA
+    LUA
+    D
+    FSHARP
+    ERLANG
+    ELIXIR
+    OCAML
+    R
+    NIM
+    SQL
+    COBOL
+    FORTH
+    PASCAL
+    FORTAN
+    LISP
+    NONE
+}
+
 model Submission {
     id String @id @default(cuid())
 
@@ -188,6 +226,8 @@ model Submission {
     executedAt    DateTime? // Execution timestamp
     judgeToken    String? // Judge0 token for the submission
     result        String? // Raw response or summary
+
+    language Language @default(NONE)
 
     createdAt DateTime             @default(now())
     testCases SubmissionTestCase[]

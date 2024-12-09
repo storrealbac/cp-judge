@@ -113,7 +113,7 @@ export default function ProblemPage({ params }: {
             </CardHeader>
             <CardContent>
               <div className="w-full">
-                <CodeEditor />
+                <CodeEditor slug={slug}/>
               </div>
             </CardContent>
           </Card>
