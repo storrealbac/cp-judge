@@ -28,7 +28,6 @@ import { api } from "~/trpc/react"
 
 import type { Problem, Tag, TestCase, TagOnProblem } from "@prisma/client"
 
-// Define the structure of a problem with its relations
 interface ProblemWithRelations extends Problem {
   tags: (TagOnProblem & { tag: Tag })[];
   testCases: TestCase[];
@@ -109,6 +108,15 @@ export default function EditProblemContent({ problem }: { problem: ProblemWithRe
 
   const removeTestCase = (id: string) => {
     setTestCases(testCases.filter(tc => tc.id !== id))
+  }
+
+  const handleAddTestCase = (newTestCase: Omit<TestCase, 'createdAt' | 'problemId'>) => {
+    const testCase: TestCase = {
+      ...newTestCase,
+      createdAt: new Date(),
+      problemId: problem.id
+    }
+    setTestCases([...testCases, testCase])
   }
 
   return (
@@ -259,7 +267,7 @@ export default function EditProblemContent({ problem }: { problem: ProblemWithRe
             <CardContent>
               <div className="mb-4">
                 <AddTestCaseDialog
-                  onAdd={(testCase) => setTestCases([...testCases, testCase])}
+                  onAdd={handleAddTestCase}
                 />
               </div>
               <div className="space-y-2">
