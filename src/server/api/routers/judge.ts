@@ -148,6 +148,7 @@ export const judgeRouter = createTRPCRouter({
             }
 
             const result = await response.json() as Judge0Response;
+            console.log("Result:", result);            
 
             if (submission.testCases[idx]) {
               await ctx.db.submissionTestCase.update({
@@ -169,6 +170,8 @@ export const judgeRouter = createTRPCRouter({
             });
             
           } catch (error) {
+            console.log("Submit Error:",error)
+
             const errorMessage = error instanceof Error ? error.message : "Unknown error";
             ee.emit('submission-update', {
               submissionId: submission.id,
