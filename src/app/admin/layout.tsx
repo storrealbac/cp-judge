@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation"
 
-
 import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar"
 //import { AppSidebar } from "~/components/app-sidebar"
 import AdminSidebar from "~/components/admin/sidebar"
@@ -15,9 +14,9 @@ export default async function AdminLayout({
   return (
     <ProtectedAdminRoute>
       <SidebarProvider>
-        <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
+        <div className="flex flex-1 items-center justify-center gap-12 md:grid-cols-[200px_1fr]">
           <AdminSidebar />
-          <main className="p-6">
+            <main className="p-6 w-1/2">
             {children}
           </main>
         </div>
@@ -25,5 +24,3 @@ export default async function AdminLayout({
     </ProtectedAdminRoute>
   )
 }
-
-

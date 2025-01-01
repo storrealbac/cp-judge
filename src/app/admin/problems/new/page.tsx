@@ -197,7 +197,7 @@ export default function CreateProblemPage() {
   };
 
   return (
-    <div className="w-full mx-auto">
+    <div className="w-full">
       <div>
         <h1 className="text-3xl font-bold mb-8">Create new problem</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
