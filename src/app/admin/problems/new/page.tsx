@@ -1,10 +1,10 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Badge } from '~/components/ui/badge';
-import { X } from 'lucide-react';
+import { X, Upload, FileUp, Trash2, CheckCircle2 } from 'lucide-react';
 import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -19,6 +19,70 @@ interface ProblemFormValues {
   tags: string[];
 }
 
+interface FileInputProps {
+  label: string;
+  accept: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onRemove: () => void;
+  file: File | null;
+}
+
+const FileInput: React.FC<FileInputProps> = ({ label, accept, onChange, onRemove, file }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <div className="space-y-2">
+      <label className="block font-medium">{label}</label>
+      <div className="relative">
+        {!file ? (
+          <div
+            onClick={() => inputRef.current?.click()}
+            className="border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-gray-400 transition-colors duration-200 bg-gray-50/50"
+          >
+            <div className="flex flex-col items-center justify-center gap-2">
+              <Upload className="h-8 w-8 text-gray-400" />
+              <div className="text-sm text-gray-600">
+                <span className="font-semibold text-primary">Click to upload</span> or drag and drop
+              </div>
+              <p className="text-xs text-gray-500">.zip files only</p>
+            </div>
+          </div>
+        ) : (
+          <div className="border rounded-lg p-4 bg-gray-50/50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <FileUp className="h-5 w-5 text-primary" />
+                <div>
+                  <p className="text-sm font-medium truncate max-w-[200px]">{file.name}</p>
+                  <p className="text-xs text-gray-500">
+                    {(file.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                </div>
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={onRemove}
+                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
+        <input
+          ref={inputRef}
+          type="file"
+          accept={accept}
+          onChange={onChange}
+          className="hidden"
+        />
+      </div>
+    </div>
+  );
+};
+
 export default function CreateProblemPage() {
   const router = useRouter();
   const createProblem = api.problem.create.useMutation({
@@ -27,7 +91,6 @@ export default function CreateProblemPage() {
       router.push(`/problems/${problem.slug}`);
     },
     onError: (error) => {
-      // This will handle the FORBIDDEN error from the server if user is not admin
       toast.error(error.message);
       if (error.message.includes("administrators")) {
         router.push("/problems");
@@ -46,6 +109,8 @@ export default function CreateProblemPage() {
   });
 
   const [newTag, setNewTag] = useState('');
+  const [inputFile, setInputFile] = useState<File | null>(null);
+  const [outputFile, setOutputFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<Partial<Record<keyof ProblemFormValues, string>>>({});
 
   const validateForm = (): boolean => {
@@ -57,19 +122,23 @@ export default function CreateProblemPage() {
     if (!formValues.statement) newErrors.statement = 'Problem statement is required';
     if (!formValues.inputDescription) newErrors.inputDescription = 'Input description is required';
     if (!formValues.outputDescription) newErrors.outputDescription = 'Output description is required';
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    if (!inputFile || !outputFile) {
+      toast.error('Please upload both input and output test cases');
+      return;
+    }
+
     if (validateForm()) {
       try {
         await createProblem.mutateAsync(formValues);
       } catch (error) {
-        // Error will be handled by the onError callback
         console.error(error);
       }
     }
@@ -107,6 +176,24 @@ export default function CreateProblemPage() {
       ...prev,
       tags: prev.tags.filter(tag => tag !== tagToRemove)
     }));
+  };
+
+  const handleInputFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type === 'application/zip') {
+      setInputFile(file);
+    } else {
+      toast.error('Please upload a zip file');
+    }
+  };
+
+  const handleOutputFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type === 'application/zip') {
+      setOutputFile(file);
+    } else {
+      toast.error('Please upload a zip file');
+    }
   };
 
   return (
@@ -197,8 +284,8 @@ export default function CreateProblemPage() {
                   }
                 }}
               />
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 onClick={addTag}
                 disabled={!newTag || formValues.tags.includes(newTag)}
               >
@@ -223,11 +310,31 @@ export default function CreateProblemPage() {
             </div>
           </div>
 
-          <Button 
-            type="submit" 
-            className="w-full"
+          <div className="grid gap-6 md:grid-cols-2">
+            <FileInput
+              label="Input test cases"
+              accept=".zip"
+              onChange={handleInputFileChange}
+              onRemove={() => setInputFile(null)}
+              file={inputFile}
+            />
+            
+            <FileInput
+              label="Output test cases"
+              accept=".zip"
+              onChange={handleOutputFileChange}
+              onRemove={() => setOutputFile(null)}
+              file={outputFile}
+            />
+          </div>
+
+          <Button
+            type="submit"
+            className="w-full flex items-center justify-center gap-2"
+            disabled={createProblem.isLoading}
           >
-            Create problem
+            <CheckCircle2 className="h-5 w-5" />
+            {createProblem.isLoading ? 'Creating...' : 'Create problem'}
           </Button>
         </form>
       </div>
