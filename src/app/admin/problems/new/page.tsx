@@ -331,10 +331,8 @@ export default function CreateProblemPage() {
           <Button
             type="submit"
             className="w-full flex items-center justify-center gap-2"
-            disabled={createProblem.isLoading}
           >
             <CheckCircle2 className="h-5 w-5" />
-            {createProblem.isLoading ? 'Creating...' : 'Create problem'}
           </Button>
         </form>
       </div>
